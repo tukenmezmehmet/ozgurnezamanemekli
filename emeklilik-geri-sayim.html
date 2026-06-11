@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Özgür Ne Zaman Emekli Olur? 🏖️</title>
+<style>
+  :root{
+    --gokyuzu:#0E3A5B;
+    --gokyuzu-acik:#155178;
+    --kum:#F6E7C8;
+    --gunes:#FFB54D;
+    --deniz:#2BB3A3;
+    --mercan:#FF6F61;
+    --murekkep:#10243A;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    font-family:"Trebuchet MS","Segoe UI",system-ui,sans-serif;
+    background:linear-gradient(180deg,var(--gokyuzu) 0%,var(--gokyuzu-acik) 45%,var(--deniz) 78%,var(--kum) 78.3%,var(--kum) 100%);
+    min-height:100vh;
+    color:var(--murekkep);
+    display:flex;flex-direction:column;align-items:center;
+    padding:32px 16px 64px;
+  }
+  .gunes{
+    width:90px;height:90px;border-radius:50%;
+    background:radial-gradient(circle at 35% 35%, #FFD98A, var(--gunes));
+    box-shadow:0 0 60px 20px rgba(255,181,77,.45);
+    margin-bottom:8px;
+    animation:nefes 5s ease-in-out infinite;
+  }
+  @keyframes nefes{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+  h1{
+    color:#fff;font-size:clamp(26px,5vw,42px);
+    text-align:center;letter-spacing:.5px;text-shadow:0 2px 8px rgba(0,0,0,.35);
+  }
+  .alt-baslik{color:#CFE6F5;text-align:center;margin-top:6px;font-size:15px;}
+
+  /* ---- Giriş formu ---- */
+  .kart{
+    background:#fff;border-radius:20px;
+    box-shadow:0 14px 40px rgba(0,0,0,.25);
+    padding:26px 24px;margin-top:26px;
+    width:100%;max-width:620px;
+  }
+  .kart.gizli{display:none;}
+  .alan{margin-bottom:16px;}
+  label{font-weight:bold;font-size:14px;display:block;margin-bottom:6px;}
+  label small{font-weight:normal;color:#5A6B7C;}
+  input[type=date],input[type=number]{
+    width:100%;
+    padding:12px 14px;font-size:17px;
+    border:2px solid #D8DEE6;border-radius:12px;
+    font-family:inherit;color:var(--murekkep);
+  }
+  input:focus{outline:3px solid var(--deniz);border-color:var(--deniz);}
+  .ikili{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  button{
+    width:100%;
+    padding:14px 22px;font-size:17px;font-weight:bold;
+    background:var(--mercan);color:#fff;border:none;border-radius:12px;
+    cursor:pointer;transition:transform .12s ease;
+  }
+  button:hover{transform:translateY(-2px);}
+  button:focus-visible{outline:3px solid var(--murekkep);}
+  .hata{color:var(--mercan);font-weight:bold;margin-top:10px;display:none;}
+
+  /* ---- Üstte ufak özet şeridi ---- */
+  .ozet{
+    display:none;
+    width:100%;max-width:620px;margin-top:20px;
+    background:rgba(255,255,255,.16);
+    border:1px solid rgba(255,255,255,.3);
+    border-radius:14px;
+    padding:10px 14px;
+    color:#fff;font-size:13px;
+    align-items:center;justify-content:space-between;gap:10px;
+    flex-wrap:wrap;
+    backdrop-filter:blur(4px);
+  }
+  .ozet.acik{display:flex;}
+  .ozet span{white-space:nowrap;}
+  .ozet button{
+    width:auto;padding:6px 14px;font-size:13px;border-radius:8px;
+    background:rgba(255,255,255,.25);color:#fff;
+  }
+
+  /* ---- Sonuç ---- */
+  .sonuc{display:none;margin-top:8px;width:100%;max-width:620px;}
+  .sonuc.acik{display:block;animation:gel .4s ease;}
+  @keyframes gel{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  .buyuk-tarih{
+    background:#fff;border-radius:16px;padding:18px;margin-top:16px;text-align:center;
+    box-shadow:0 8px 20px rgba(0,0,0,.18);
+  }
+  .buyuk-tarih .etiket{font-size:13px;color:#5A6B7C;text-transform:uppercase;letter-spacing:1px;}
+  .buyuk-tarih .tarih{font-size:clamp(24px,6vw,36px);font-weight:900;color:var(--gokyuzu);margin-top:4px;}
+
+  .sayac{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px;}
+  .kutu{
+    background:#fff;border-radius:16px;padding:20px 8px;text-align:center;
+    box-shadow:0 8px 20px rgba(0,0,0,.18);
+  }
+  .kutu .deger{font-size:clamp(38px,10vw,64px);font-weight:900;color:var(--gokyuzu);line-height:1;font-variant-numeric:tabular-nums;}
+  .kutu .etiket{font-size:13px;margin-top:8px;color:#5A6B7C;letter-spacing:2px;text-transform:uppercase;}
+  .sayac.saatlik{margin-top:12px;}
+  .sayac.saatlik .kutu{padding:14px 6px;background:rgba(255,255,255,.92);}
+  .sayac.saatlik .deger{font-size:clamp(26px,7vw,42px);color:var(--deniz);}
+  .toplam-gun{
+    text-align:center;margin-top:12px;color:#fff;font-size:14px;
+    text-shadow:0 1px 4px rgba(0,0,0,.4);
+  }
+  .toplam-gun b{font-variant-numeric:tabular-nums;font-size:16px;}
+
+  .mesaj{
+    background:var(--gunes);color:var(--murekkep);
+    border-radius:16px;padding:14px 18px;margin-top:14px;
+    font-size:16px;font-weight:bold;text-align:center;
+    box-shadow:0 8px 20px rgba(0,0,0,.18);
+  }
+  .sartlar,.acilar{
+    background:rgba(255,255,255,.92);border-radius:16px;
+    padding:18px 20px;margin-top:14px;
+    box-shadow:0 8px 20px rgba(0,0,0,.18);
+  }
+  .sartlar h2,.acilar h2{font-size:16px;margin-bottom:12px;color:var(--gokyuzu);}
+  .sart{margin-bottom:14px;}
+  .sart .ust{display:flex;justify-content:space-between;font-size:14px;margin-bottom:6px;}
+  .bar{height:12px;background:#E3E8EF;border-radius:6px;overflow:hidden;}
+  .bar div{height:100%;border-radius:6px;background:var(--deniz);transition:width .6s ease;}
+  .bar.yas div{background:#3EA6E8;}
+  .sart .not{font-size:12px;color:#5A6B7C;margin-top:4px;}
+  .acilar ul{list-style:none;}
+  .acilar li{
+    padding:7px 0;font-size:15px;border-bottom:1px dashed #D8DEE6;
+    display:flex;justify-content:space-between;gap:10px;
+  }
+  .acilar li:last-child{border-bottom:none;}
+  .acilar b{font-variant-numeric:tabular-nums;color:var(--mercan);white-space:nowrap;}
+  .kutlama{
+    font-size:clamp(28px,6vw,40px);font-weight:900;color:#fff;text-align:center;
+    margin-top:24px;text-shadow:0 2px 8px rgba(0,0,0,.35);display:none;
+  }
+  .dipnot{margin-top:auto;padding-top:40px;color:rgba(255,255,255,.85);font-size:12px;text-align:center;max-width:620px;}
+  @media (prefers-reduced-motion: reduce){.gunes{animation:none}}
+  @media (max-width:480px){.sayac{gap:8px}.kutu{padding:14px 4px}.ikili{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="gunes" aria-hidden="true"></div>
+<h1>Özgür Ne Zaman Emekli Olur?</h1>
+<p class="alt-baslik" id="alt-baslik">SGK uygulamasındaki rakamları gir, gerisini mesai saatleri içinde biz hesaplayalım. ☕</p>
+
+<!-- Ufak özet şeridi (bilgiler girildikten sonra) -->
+<div class="ozet" id="ozet">
+  <span id="ozet-metin">–</span>
+  <button onclick="duzenle()">✏️ Düzenle</button>
+</div>
+
+<!-- Giriş formu -->
+<div class="kart" id="form-kart">
+  <div class="alan">
+    <label for="dogum">Doğum tarihin</label>
+    <input type="date" id="dogum">
+  </div>
+  <div class="alan">
+    <label for="prim">Şu anki prim gün sayın <small>(SGK uygulamasında "Prim Ödeme Gün Sayısı")</small></label>
+    <input type="number" id="prim" placeholder="örn. 2532" min="0" max="20000">
+  </div>
+  <div class="ikili">
+    <div class="alan">
+      <label for="yas-sart">Emeklilik yaşı şartı</label>
+      <input type="number" id="yas-sart" value="60" min="38" max="70">
+    </div>
+    <div class="alan">
+      <label for="prim-sart">Gerekli prim günü</label>
+      <input type="number" id="prim-sart" value="7000" min="3600" max="9000">
+    </div>
+  </div>
+  <button onclick="hesapla(true)">Hesapla, kaç yıl kaldı? 😬</button>
+  <p class="hata" id="hata">Bir şeyler eksik ya da garip görünüyor, bir daha bakar mısın? 🤔</p>
+</div>
+
+<!-- Sonuç -->
+<div class="sonuc" id="sonuc">
+  <div class="buyuk-tarih">
+    <div class="etiket">Tahminî özgürlük tarihin 🕊️</div>
+    <div class="tarih" id="hedef-tarih">–</div>
+  </div>
+
+  <div class="sayac">
+    <div class="kutu"><div class="deger" id="yil">–</div><div class="etiket">Yıl</div></div>
+    <div class="kutu"><div class="deger" id="ay">–</div><div class="etiket">Ay</div></div>
+    <div class="kutu"><div class="deger" id="gun">–</div><div class="etiket">Gün</div></div>
+  </div>
+  <div class="sayac saatlik">
+    <div class="kutu"><div class="deger" id="saat">–</div><div class="etiket">Saat</div></div>
+    <div class="kutu"><div class="deger" id="dakika">–</div><div class="etiket">Dakika</div></div>
+    <div class="kutu"><div class="deger" id="saniye">–</div><div class="etiket">Saniye</div></div>
+  </div>
+  <p class="toplam-gun">Yani topu topu <b id="toplam-gun">–</b> gün. Göz açıp kapayıncaya kadar geçer... gibi. 😶</p>
+
+  <div class="mesaj" id="mesaj"></div>
+
+  <div class="sartlar">
+    <h2>Şartların durumu 📊</h2>
+    <div class="sart">
+      <div class="ust"><span>👴 Yaş şartı</span><span id="yas-durum">–</span></div>
+      <div class="bar yas"><div id="yas-bar" style="width:0%"></div></div>
+      <p class="not" id="yas-not"></p>
+    </div>
+    <div class="sart">
+      <div class="ust"><span>🪙 Prim günü şartı</span><span id="prim-durum">–</span></div>
+      <div class="bar"><div id="prim-bar" style="width:0%"></div></div>
+      <p class="not" id="prim-not"></p>
+    </div>
+    <p class="not" id="darbogaz" style="font-size:14px;font-weight:bold;color:var(--murekkep);margin-top:6px;"></p>
+  </div>
+
+  <div class="acilar">
+    <h2>Bu süre zarfında seni bekleyenler 📋</h2>
+    <ul>
+      <li><span>😩 Pazartesi sabahı</span><b id="pazartesi">–</b></li>
+      <li><span>📅 Haftalık toplantı (yaklaşık)</span><b id="toplanti">–</b></li>
+      <li><span>☕ İş yeri çayı/kahvesi (günde 3'ten)</span><b id="kahve">–</b></li>
+      <li><span>💸 "Maaş yattı" bildirimi</span><b id="maas">–</b></li>
+      <li><span>📧 "Sayın yetkili..." diye başlayan mail (tahminî)</span><b id="mail">–</b></li>
+      <li><span>🖨️ "Yazıcı yine bozuldu" krizi (istatistiksel)</span><b id="yazici">–</b></li>
+    </ul>
+  </div>
+</div>
+
+<div class="kutlama" id="kutlama">🎉 ŞARTLARI SAĞLAMIŞSIN! Dilekçeyi yaz, deniz seni bekliyor! 🏖️</div>
+
+<p class="dipnot">Bu site bilimsel değildir ama duygusal olarak %100 doğrudur. Prim hesabı "kesintisiz çalışmaya devam" varsayımıyla yapılır (ayda 30 gün). Resmî sonuç için SGK / e-Devlet esastır.</p>
+
+<script>
+let zamanlayici = null;
+const AYLAR = ['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
+const KAYIT_ANAHTARI = 'emeklilik-geri-sayim-v1';
+
+/* ---- Kayıt (tarayıcı hafızası) ---- */
+function kaydet(veri){
+  try{ localStorage.setItem(KAYIT_ANAHTARI, JSON.stringify(veri)); }catch(e){}
+}
+function kayitOku(){
+  try{
+    const ham = localStorage.getItem(KAYIT_ANAHTARI);
+    return ham ? JSON.parse(ham) : null;
+  }catch(e){ return null; }
+}
+function kayitSil(){
+  try{ localStorage.removeItem(KAYIT_ANAHTARI); }catch(e){}
+}
+
+/* ---- Sayfa açılışı: kayıt varsa direkt sayaç ---- */
+window.addEventListener('DOMContentLoaded', function(){
+  const k = kayitOku();
+  if(k && k.dogum && k.prim != null){
+    document.getElementById('dogum').value = k.dogum;
+    document.getElementById('prim').value = k.prim;
+    document.getElementById('yas-sart').value = k.yasSart || 60;
+    document.getElementById('prim-sart').value = k.primSart || 7000;
+    // Kayıt tarihinden bu yana primin işlediğini varsay (ayda 30 gün)
+    if(k.kayitTarihi){
+      const gecenGun = (Date.now() - k.kayitTarihi) / 86400000;
+      const islenenPrim = Math.floor(gecenGun / 30.44 * 30);
+      if(islenenPrim > 0){
+        document.getElementById('prim').value = k.prim + islenenPrim;
+      }
+    }
+    hesapla(false);
+  }
+});
+
+function duzenle(){
+  document.getElementById('form-kart').classList.remove('gizli');
+  document.getElementById('ozet').classList.remove('acik');
+  document.getElementById('alt-baslik').style.display = '';
+  document.getElementById('form-kart').scrollIntoView({behavior:'smooth'});
+}
+
+function hesapla(yeniKayit){
+  const dogumStr = document.getElementById('dogum').value;
+  const prim = parseInt(document.getElementById('prim').value, 10);
+  const yasSart = parseInt(document.getElementById('yas-sart').value, 10);
+  const primSart = parseInt(document.getElementById('prim-sart').value, 10);
+
+  const hata = document.getElementById('hata');
+  const sonuc = document.getElementById('sonuc');
+  const kutlama = document.getElementById('kutlama');
+  hata.style.display = 'none';
+  kutlama.style.display = 'none';
+  sonuc.classList.remove('acik');
+  if(zamanlayici) clearInterval(zamanlayici);
+
+  if(!dogumStr || isNaN(prim) || isNaN(yasSart) || isNaN(primSart)){
+    hata.style.display = 'block'; return;
+  }
+
+  const dogum = new Date(dogumStr + 'T00:00:00');
+  const simdi = new Date();
+  if(isNaN(dogum) || dogum >= simdi){ hata.style.display = 'block'; return; }
+
+  // Kaydet
+  if(yeniKayit){
+    kaydet({dogum:dogumStr, prim:prim, yasSart:yasSart, primSart:primSart, kayitTarihi:Date.now()});
+  }
+
+  // Formu küçült, özet şeridini aç
+  document.getElementById('form-kart').classList.add('gizli');
+  document.getElementById('alt-baslik').style.display = 'none';
+  const ozet = document.getElementById('ozet');
+  ozet.classList.add('acik');
+  document.getElementById('ozet-metin').textContent =
+    '🎂 ' + formatTarih(dogum) + '  •  🪙 ' + prim.toLocaleString('tr-TR') + ' / ' + primSart.toLocaleString('tr-TR') + ' gün  •  👴 ' + yasSart + ' yaş';
+
+  // Yaş şartının dolacağı tarih
+  const yasTarihi = new Date(dogum);
+  yasTarihi.setFullYear(yasTarihi.getFullYear() + yasSart);
+
+  // Prim şartının dolacağı tarih (ayda 30 gün prim varsayımı)
+  const kalanPrim = Math.max(0, primSart - prim);
+  const primTarihi = new Date(simdi);
+  primTarihi.setDate(primTarihi.getDate() + Math.ceil(kalanPrim / 30 * 30.44));
+
+  // İkisi de dolmalı: geç olan kazanır
+  const hedef = yasTarihi > primTarihi ? new Date(yasTarihi) : new Date(primTarihi);
+  hedef.setHours(9,0,0,0); // mesai başlangıcında özgürlük
+
+  // Şart barları
+  const yasimGun = (simdi - dogum) / 86400000;
+  const yasOran = Math.min(100, Math.round(yasimGun / (yasSart * 365.25) * 100));
+  const primOran = Math.min(100, Math.round(prim / primSart * 100));
+  document.getElementById('yas-bar').style.width = yasOran + '%';
+  document.getElementById('prim-bar').style.width = primOran + '%';
+  document.getElementById('yas-durum').textContent = '%' + yasOran;
+  document.getElementById('prim-durum').textContent = '%' + primOran;
+  document.getElementById('yas-not').textContent =
+    yasTarihi <= simdi ? 'Yaş şartı tamam! 🎂' :
+    yasSart + ' yaşını ' + formatTarih(yasTarihi) + ' tarihinde dolduruyorsun.';
+  document.getElementById('prim-not').textContent =
+    kalanPrim === 0 ? 'Prim günün tamam! 🪙' :
+    kalanPrim.toLocaleString('tr-TR') + ' gün eksik — çalışmaya devam edersen tahminen ' + formatTarih(primTarihi) + ' civarı dolar.';
+
+  // Darboğaz mesajı
+  const darbogaz = document.getElementById('darbogaz');
+  if(hedef <= simdi){
+    darbogaz.textContent = '';
+  } else if(yasTarihi > primTarihi){
+    darbogaz.textContent = '⏳ Seni bekleten şart: YAŞ. Primin çoktan dolacak ama SGK "dur bakalım delikanlı" diyor.';
+  } else {
+    darbogaz.textContent = '⏳ Seni bekleten şart: PRİM GÜNÜ. Yaş tamam ama gün sayısı "az daha çalış" diyor.';
+  }
+
+  if(hedef <= simdi){
+    kutlama.style.display = 'block';
+    return;
+  }
+
+  document.getElementById('hedef-tarih').textContent = formatTarih(hedef);
+  sonuc.classList.add('acik');
+  guncelle(hedef);
+  zamanlayici = setInterval(()=>guncelle(hedef), 1000);
+}
+
+function formatTarih(t){
+  return t.getDate() + ' ' + AYLAR[t.getMonth()] + ' ' + t.getFullYear();
+}
+
+function guncelle(hedef){
+  const simdi = new Date();
+  if(hedef <= simdi){
+    document.getElementById('sonuc').classList.remove('acik');
+    document.getElementById('kutlama').style.display = 'block';
+    clearInterval(zamanlayici);
+    return;
+  }
+
+  // Yıl / ay / gün farkı (takvim bazlı)
+  let y = hedef.getFullYear() - simdi.getFullYear();
+  let a = hedef.getMonth() - simdi.getMonth();
+  let g = hedef.getDate() - simdi.getDate();
+  if(g < 0){
+    a--;
+    g += new Date(simdi.getFullYear(), simdi.getMonth()+1, 0).getDate();
+  }
+  if(a < 0){ y--; a += 12; }
+
+  document.getElementById('yil').textContent = y;
+  document.getElementById('ay').textContent = a;
+  document.getElementById('gun').textContent = g;
+
+  // Saat / dakika / saniye büyük kutular
+  const farkMs = hedef - simdi;
+  const toplamGun = Math.floor(farkMs / 86400000);
+  const saat = Math.floor((farkMs % 86400000) / 3600000);
+  const dakika = Math.floor((farkMs % 3600000) / 60000);
+  const saniye = Math.floor((farkMs % 60000) / 1000);
+  document.getElementById('saat').textContent = saat;
+  document.getElementById('dakika').textContent = dakika;
+  document.getElementById('saniye').textContent = saniye;
+  document.getElementById('toplam-gun').textContent = toplamGun.toLocaleString('tr-TR');
+
+  // Acı istatistikler
+  const hafta = farkMs / (7 * 86400000);
+  const isGunu = Math.round(toplamGun * 5 / 7);
+  let pazartesi = 0;
+  const ilkPazartesiKayma = (8 - simdi.getDay()) % 7 || 7;
+  if(toplamGun >= ilkPazartesiKayma){
+    pazartesi = Math.floor((toplamGun - ilkPazartesiKayma) / 7) + 1;
+  }
+
+  document.getElementById('pazartesi').textContent = pazartesi.toLocaleString('tr-TR');
+  document.getElementById('toplanti').textContent = Math.floor(hafta).toLocaleString('tr-TR');
+  document.getElementById('kahve').textContent = (isGunu * 3).toLocaleString('tr-TR');
+  document.getElementById('maas').textContent = Math.max(0, y*12 + a + (g>0?1:0)).toLocaleString('tr-TR');
+  document.getElementById('mail').textContent = (isGunu * 25).toLocaleString('tr-TR');
+  document.getElementById('yazici').textContent = Math.max(1, Math.floor(hafta / 2)).toLocaleString('tr-TR');
+
+  // Duruma göre mesaj
+  const mesaj = document.getElementById('mesaj');
+  if(toplamGun > 7300){
+    mesaj.textContent = '🗿 Daha çoook var. Bu sayfayı yer imlerine ekle, torunlarınla beraber bakarsınız.';
+  } else if(toplamGun > 3650){
+    mesaj.textContent = '😅 Uzun bir yol ama her gün sayaç azalıyor. Çayını tazele, bu bir maraton.';
+  } else if(toplamGun > 1825){
+    mesaj.textContent = '🏃 Yolun yarısından fazlası gitti sayılır... ya da gitmedi. Bakma sen, sayaç işliyor!';
+  } else if(toplamGun > 730){
+    mesaj.textContent = '🌤️ Ufukta görünmeye başladı! Emeklilikte ne yapacağını düşünmeye başlayabilirsin.';
+  } else if(toplamGun > 365){
+    mesaj.textContent = '🧳 Son 1-2 yıl! Masandaki eşyaları yavaş yavaş azaltma zamanı.';
+  } else if(toplamGun > 90){
+    mesaj.textContent = '🎯 Sayılı gün çabuk geçer! Veda pastası için pastane araştırmaya başla.';
+  } else if(toplamGun > 30){
+    mesaj.textContent = '🔥 Son düzlük! Artık toplantılarda "bunu benden sonrakiler düşünsün" diyebilirsin.';
+  } else {
+    mesaj.textContent = '🏖️ GÜNLER SAYILI! Otomatik yanıt mesajını şimdiden yazabilirsin: "Emekliyim, dönmeyeceğim."';
+  }
+}
+</script>
+</body>
+</html>
